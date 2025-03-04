@@ -78,13 +78,19 @@ function trackTime() {
           console.log(`ElapsedTime : ${elapsedTime}`);
           console.log(`PreviousET : ${previousElapsedTime}`);
 
-          updateSites();
+          // Must be called like this because asynchronus, the callback function executes after getting data
+          // same as updateSites()
+          chrome.storage.local.get(["sites"], (data) => {
+            sites = data.sites;
+            chrome.storage.local.set({ sites: sites });
+          });
+          // updateSites();
           // Check if hostname exist in site before setting it
           if (hostname in sites) {
             chrome.storage.local.set({ sites: sites });
-            // Prevents oscillating site times
-            updateSites();
           }
+          // Prevents oscillating site times
+          updateSites();
 
           // Block site if time exceeded
           if (limits[hostname] && sites[hostname] >= limits[hostname] * 60) {

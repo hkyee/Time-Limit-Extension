@@ -10,6 +10,9 @@ Issues:
 - When a user removes the limit, the sites should be reset
 - When a user enters a new website, the sites should be reset
 
+Fixes:
+- Add || {}
+- Change starttime to be stored in chrome
 
 Cases:
 - When user enters a limit on site A, while already on site A
