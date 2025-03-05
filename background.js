@@ -10,17 +10,14 @@ let previousElapsedTime = null;
 
 function updateLimits() {
   chrome.storage.sync.get(["limits"], (data) => {
-    if (data.limits) {
-      limits = data.limits;
-    } // if data.limits exists, assign data.limits to "limits" object
+    // if data.limits exists, assign data.limits to "limits" object
+    limits = data.limits || {};
   });
 }
 
 function updateSites() {
   chrome.storage.local.get(["sites"], (sitesData) => {
-    if (sitesData.sites) {
-      sites = sitesData.sites;
-    }
+    sites = sitesData.sites || {};
   });
 }
 
@@ -49,6 +46,15 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   }
 });
 
+// Reset startTime when save is clicked in popup
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.message === "startTime") {
+    startTime = Date.now();
+    previousElapsedTime = null;
+    console.log("StartTime reset");
+  }
+});
+
 // Track time spent on active tab
 function trackTime() {
   // Update the limits from chrome.storage everytime function is run
@@ -58,6 +64,7 @@ function trackTime() {
     chrome.tabs.get(activeTab, (tab) => {
       if (tab && tab.url) {
         let hostname = new URL(tab.url).hostname;
+
         // Should track time only for those sites that are in limits
         if (hostname in limits) {
           updateSites();
@@ -74,6 +81,8 @@ function trackTime() {
           } else {
             sites[hostname] = previousElapsedTime + elapsedTime;
           }
+
+          updateSites();
 
           console.log(`ElapsedTime : ${elapsedTime}`);
           console.log(`PreviousET : ${previousElapsedTime}`);
@@ -98,11 +107,17 @@ function trackTime() {
             chrome.tabs.update(activeTab, { url: blockedPage });
           }
         }
-        console.log(
-          `Time on ${hostname}: ${sites[hostname]} seconds, Limit: ${limits[hostname]} minute(s)`,
-        );
-        console.log(limits);
-        console.log(sites);
+
+        // Another asyncronus issue with updateSites()
+        chrome.storage.local.get(["sites"], (data) => {
+          sites = data.sites;
+          console.log(
+            `Time on ${hostname}: ${sites[hostname]} seconds, Limit: ${limits[hostname]} minute(s)`,
+          );
+          console.log(limits);
+          console.log(sites);
+          chrome.storage.local.set({ sites: sites });
+        });
       }
     });
   }

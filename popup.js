@@ -2,6 +2,8 @@ document.getElementById("save").addEventListener("click", () => {
   let site = document.getElementById("site").value;
   let minutes = parseInt(document.getElementById("minutes").value);
 
+  chrome.runtime.sendMessage({ message: "startTime" });
+
   // This block sets limits in chrome.storage
   if (site && minutes > 0) {
     chrome.storage.sync.get(["limits"], (data) => {
