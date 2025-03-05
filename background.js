@@ -64,59 +64,55 @@ function trackTime() {
     chrome.tabs.get(activeTab, (tab) => {
       if (tab && tab.url) {
         let hostname = new URL(tab.url).hostname;
-
-        // Should track time only for those sites that are in limits
-        if (hostname in limits) {
-          updateSites();
-          if (previousElapsedTime == null) {
-            // This line will only run once everytime you switch tabs or update a tab.
-            // When a tab was never opened before, previousElapsedTime = 0
-            previousElapsedTime = sites?.[hostname] || 0;
-          }
-          let elapsedTime = Math.floor((Date.now() - startTime) / 1000); // in seconds
-          // We check if the hostname exist in the sites object
-          if (isNaN(sites[hostname])) {
-            // if hostname was not in sites before, create it and assign it as 0
-            sites[hostname] = 0;
-          } else {
-            sites[hostname] = previousElapsedTime + elapsedTime;
-          }
-
-          updateSites();
-
-          console.log(`ElapsedTime : ${elapsedTime}`);
-          console.log(`PreviousET : ${previousElapsedTime}`);
-
-          // Must be called like this because asynchronus, the callback function executes after getting data
-          // same as updateSites()
-          chrome.storage.local.get(["sites"], (data) => {
-            sites = data.sites;
-            chrome.storage.local.set({ sites: sites });
-          });
-          // updateSites();
-          // Check if hostname exist in site before setting it
-          if (hostname in sites) {
-            chrome.storage.local.set({ sites: sites });
-          }
-          // Prevents oscillating site times
-          updateSites();
-
-          // Block site if time exceeded
-          if (limits[hostname] && sites[hostname] >= limits[hostname] * 60) {
-            let blockedPage = chrome.runtime.getURL("blocked.html");
-            chrome.tabs.update(activeTab, { url: blockedPage });
-          }
-        }
-
-        // Another asyncronus issue with updateSites()
         chrome.storage.local.get(["sites"], (data) => {
-          sites = data.sites;
+          sites = data.sites || {};
+          // Should track time only for those sites that are in limits
+          if (hostname in limits) {
+            updateSites();
+            if (previousElapsedTime == null) {
+              // This line will only run once everytime you switch tabs or update a tab.
+              // When a tab was never opened before, previousElapsedTime = 0
+              previousElapsedTime = sites?.[hostname] || 0;
+            }
+            let elapsedTime = Math.floor((Date.now() - startTime) / 1000); // in seconds
+            // We check if the hostname exist in the sites object
+            if (isNaN(sites[hostname]) || Object.keys(sites).length === 0) {
+              // if hostname was not in sites before, create it and assign it as 0
+              sites[hostname] = 0;
+            } else {
+              sites[hostname] = previousElapsedTime + elapsedTime;
+            }
+            chrome.storage.local.set({ sites: sites });
+            updateSites();
+
+            console.log(`ElapsedTime : ${elapsedTime}`);
+            console.log(`PreviousET : ${previousElapsedTime}`);
+
+            // Must be called like this because asynchronus, the callback function executes after getting data
+            // same as updateSites()
+            // chrome.storage.local.get(["sites"], (data) => {
+            //   sites = data.sites;
+            //   chrome.storage.local.set({ sites: sites });
+            // });
+            // updateSites();
+            // Check if hostname exist in site before setting it
+            // if (hostname in sites) {
+            //   chrome.storage.local.set({ sites: sites });
+            // }
+            // Prevents oscillating site times
+            updateSites();
+
+            // Block site if time exceeded
+            if (limits[hostname] && sites[hostname] >= limits[hostname] * 60) {
+              let blockedPage = chrome.runtime.getURL("blocked.html");
+              chrome.tabs.update(activeTab, { url: blockedPage });
+            }
+          }
           console.log(
             `Time on ${hostname}: ${sites[hostname]} seconds, Limit: ${limits[hostname]} minute(s)`,
           );
           console.log(limits);
           console.log(sites);
-          chrome.storage.local.set({ sites: sites });
         });
       }
     });
