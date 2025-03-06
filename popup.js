@@ -33,17 +33,17 @@ function updateList() {
         removeBtn.appendChild(img);
 
         let li = document.createElement("li");
+        let span = document.createElement("span");
+        span.textContent = `${site}: ${data.limits[site]} minutes`;
+        span.style.flex = "1"; // Makes the text take available space
+        span.style.textAlign = "center";
 
         li.appendChild(removeBtn);
-        li.appendChild(
-          document.createTextNode(`${site}: ${data.limits[site]} minutes`),
-        );
+        li.appendChild(span);
         li.style.width = "100%";
         li.style.display = "flex";
         li.style.alignItems = "center";
         li.style.justifyContent = "center";
-
-        // li.style.textAlign = "center";
 
         li.style.height = "30px";
         li.classList.add("limit-lists");
