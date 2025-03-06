@@ -9,13 +9,27 @@
 </head>
 
 <body>
-  <h2>Set Time Limits</h2>
-  <input type="text" id="site" placeholder="example.com">
-  <input type="number" id="minutes" placeholder="Minutes">
-  <button id="save">Save</button>
-  <h3>Limits:</h3>
-  <ul id="limitList"></ul>
-  <script src="popup.js"></script>
+  <h2 style="text-align: center; color: #fabd2f;">Set Time Limits</h2>
+  <div style="text-align: center;">
+    <div class="container">
+      <div class="entryarea">
+        <input type="text" id="site">
+        <div class="labelline"> Enter a website</div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="entryarea">
+        <input type="number" id="minutes">
+        <div class="labelline"> Enter minutes allowed</div>
+      </div>
+    </div>
+
+    <button id="save">Save</button>
+    <h3>Limits:</h3>
+    <ul id="limitList"></ul>
+    <script src="popup.js"></script>
+
+  </div>
 </body>
 
 </html>

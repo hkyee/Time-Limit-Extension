@@ -1,9 +1,22 @@
+:root {
+  --background-color: #282828;
+  /* black */
+  --text-color: #fabd2f;
+  /* yellow */
+  --another-color: #8ec07c;
+  /* green */
+  --red-color: #cc241d;
+  /* red */
+  --brighter-red: #fb4934;
+  /* brighter red */
+}
+
 body {
   font-family: Arial, sans-serif;
-  width: 200px;
+  width: 250px;
   height: auto;
   padding: 10px;
-  background-color: #c8f2a5;
+  background-color: var(--background-color);
   /* Can't round border edges */
   /* border-radius: 50px; */
   /* Soft shadow */
@@ -13,8 +26,8 @@ body {
 
 #save {
   margin: 10px;
-  background-color: #997337;
-  color: white;
+  background-color: var(--text-color);
+  color: var(--background-color);
   border: none;
   padding: 5px;
   /* makes the cursor a pointer when hovered over the button */
@@ -22,9 +35,13 @@ body {
   border-radius: 10%;
 }
 
+#save:hover {
+  background-color: var(--another-color);
+}
+
 .minus-btn {
 
-  background-color: #c8f2a5;
+  background-color: var(--background-color);
   display: inline-block;
   cursor: pointer;
   border: 0;
@@ -34,4 +51,74 @@ body {
 /* Removes white border for minus-button */
 button {
   all: unset;
+}
+
+
+.container {
+  margin-top: 30px;
+  width: 100%;
+  text-align: center;
+}
+
+.entryarea {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+}
+
+input {
+  /* position: absolute; */
+  width: 100%;
+  outline: none;
+  font-size: 1.2em;
+  /* padding: (top-bottom left-right) */
+  padding: 5px;
+  line-height: 20px;
+  border-radius: 5px;
+  border: 1px solid var(--text-color);
+  /* white */
+  background: transparent;
+  transition: 0.1s ease;
+  z-index: 1111;
+}
+
+.labelline {
+  position: absolute;
+  font-size: 1.2em;
+  color: var(--text-color);
+  padding: 0px;
+  margin: 0 10px;
+  background-color: var(--background-color);
+  transition: 0.2s ease;
+}
+
+input:focus {
+  color: var(--another-color);
+  border: 3px solid;
+}
+
+input:focus+.labelline {
+  color: var(--another-color);
+  height: 15px;
+  line-height: 15px;
+  padding: 0 10px;
+  transform: translate(-10px, -17px) scale(0.88);
+  z-index: 1111;
+}
+
+/* Remove the up and down arrows in input type number */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+h3 {
+  color: var(--brighter-red);
+}
+
+.limit-lists {
+  color: var(--brighter-red);
 }

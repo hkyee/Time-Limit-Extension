@@ -38,11 +38,15 @@ function updateList() {
         li.appendChild(
           document.createTextNode(`${site}: ${data.limits[site]} minutes`),
         );
+        li.style.width = "100%";
         li.style.display = "flex";
         li.style.alignItems = "center";
-        li.style.justifyContent = "start";
-        li.style.width = "100%";
+        li.style.justifyContent = "center";
+
+        // li.style.textAlign = "center";
+
         li.style.height = "30px";
+        li.classList.add("limit-lists");
         limitList.appendChild(li);
 
         // Removes item when clicked minus button
