@@ -7,9 +7,9 @@
 
 
 Issues:
-- When a user removes the limit, the sites should be reset
-- When a user enters a new website, the sites should be reset
-- When clicked RemoveBtn, while on the site, does not delete sites[site]
+V When a user removes the limit, the sites should be reset
+V When a user enters a new website, the sites should be reset
+V When clicked RemoveBtn, while on the site, does not delete sites[site]
 - www.twitch.tv needed instead of twitch.tv
 
 Fixes:
