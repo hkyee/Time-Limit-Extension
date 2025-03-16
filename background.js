@@ -1,3 +1,5 @@
+import { parse } from "tldts";
+
 let sites = {}; // Creates an object called sites to store
 // key: hostname value: time in hostname
 let limits = {}; // Creates an object called limits to store
@@ -64,23 +66,25 @@ function trackTime() {
     chrome.tabs.get(activeTab, (tab) => {
       if (tab && tab.url) {
         let hostname = new URL(tab.url).hostname;
+        let domain = parse(hostname).domain;
+        console.log(domain);
         chrome.storage.local.get(["sites"], (data) => {
           sites = data.sites || {};
           // Should track time only for those sites that are in limits
-          if (hostname in limits) {
+          if (domain in limits) {
             updateSites();
             if (previousElapsedTime == null) {
               // This line will only run once everytime you switch tabs or update a tab.
               // When a tab was never opened before, previousElapsedTime = 0
-              previousElapsedTime = sites?.[hostname] || 0;
+              previousElapsedTime = sites?.[domain] || 0;
             }
             let elapsedTime = Math.floor((Date.now() - startTime) / 1000); // in seconds
             // We check if the hostname exist in the sites object
-            if (isNaN(sites[hostname]) || Object.keys(sites).length === 0) {
+            if (isNaN(sites[domain]) || Object.keys(sites).length === 0) {
               // if hostname was not in sites before, create it and assign it as 0
-              sites[hostname] = 0;
+              sites[domain] = 0;
             } else {
-              sites[hostname] = previousElapsedTime + elapsedTime;
+              sites[domain] = previousElapsedTime + elapsedTime;
             }
             chrome.storage.local.set({ sites: sites });
             updateSites();
@@ -103,13 +107,13 @@ function trackTime() {
             updateSites();
 
             // Block site if time exceeded
-            if (limits[hostname] && sites[hostname] >= limits[hostname] * 60) {
+            if (limits[domain] && sites[domain] >= limits[domain] * 60) {
               let blockedPage = chrome.runtime.getURL("blocked.html");
               chrome.tabs.update(activeTab, { url: blockedPage });
             }
           }
           console.log(
-            `Time on ${hostname}: ${sites[hostname]} seconds, Limit: ${limits[hostname]} minute(s)`,
+            `Time on ${domain}: ${sites[domain]} seconds, Limit: ${limits[domain]} minute(s)`,
           );
           console.log(limits);
           console.log(sites);

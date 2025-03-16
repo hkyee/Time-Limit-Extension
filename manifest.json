@@ -5,7 +5,7 @@
   "description" : "Limits daily time spent on specific websites.",
   "permissions" : ["storage", "tabs", "scripting", "alarms"],
   "background" : {
-    "service_worker" : "background.js"
+    "service_worker" : "dist/background.js"
   },
   "host_permissions" : ["<all_urls>"],
   "action" : {
