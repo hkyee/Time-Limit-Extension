@@ -10,11 +10,8 @@ Issues:
 - [X] When a user removes the limit, the sites should be reset
 - [X] When a user enters a new website, the sites should be reset
 - [X] When clicked RemoveBtn, while on the site, does not delete sites[site]
+- [X] Does not reset at 12 am
 - [ ] www.twitch.tv needed instead of twitch.tv
-- [ ] Does not reset at 12 am
-
-Fixes:
-- Change starttime to be stored in chrome
 
 Cases:
 - When user enters a limit on site A, while already on site A
