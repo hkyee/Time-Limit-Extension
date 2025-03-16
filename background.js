@@ -134,13 +134,18 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 function getNextMidnight() {
   let midnight = new Date(); // Gets the current day and time
   midnight.setDate(midnight.getDate() + 1); // Moves to next day
+  // midnight.setDate(midnight.getDate()); // For testing
+  //setHours(hoursValue, minutesValue, secondsValue, msValue)
   midnight.setHours(0, 0, 0, 0); // Set to 12 AM
+  return midnight.getTime();
 }
 
 function resetSiteTimes() {
   sites = {};
   chrome.storage.local.set({ sites });
+  previousElapsedTime = null;
+  startTime = Date.now();
 }
 
-// Runs trackTime every 10 seconds
+// Runs trackTime every 1 second
 setInterval(trackTime, 1000);

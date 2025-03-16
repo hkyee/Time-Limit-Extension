@@ -16,6 +16,19 @@ document.getElementById("save").addEventListener("click", () => {
   }
 });
 
+// Chrome does not allow onclick()
+// function toggleColor() {
+//   document.getElementById("save").classList.toggle("save-active");
+// }
+
+document.getElementById("save").addEventListener("mousedown", (event) => {
+  event.target.style.backgroundColor = "#8ec07c";
+});
+
+document.getElementById("save").addEventListener("mouseup", (event) => {
+  event.target.style.backgroundColor = "";
+});
+
 function updateList() {
   chrome.storage.sync.get(["limits"], (data) => {
     chrome.storage.local.get(["sites"], (sitesData) => {

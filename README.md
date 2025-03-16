@@ -11,6 +11,7 @@ Issues:
 - [X] When a user enters a new website, the sites should be reset
 - [X] When clicked RemoveBtn, while on the site, does not delete sites[site]
 - [ ] www.twitch.tv needed instead of twitch.tv
+- [ ] Does not reset at 12 am
 
 Fixes:
 - Change starttime to be stored in chrome

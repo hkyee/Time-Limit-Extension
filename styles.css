@@ -3,6 +3,8 @@
   /* black */
   --text-color: #fabd2f;
   /* yellow */
+  --darker-yellow: #d79921;
+  /* darker yellow */
   --another-color: #8ec07c;
   /* green */
   --red-color: #cc241d;
@@ -34,9 +36,14 @@ body {
   cursor: pointer;
   border-radius: 10%;
   font-weight: bold;
+  transition: background-color 0.2s ease-in-out;
 }
 
 #save:hover {
+  background-color: var(--darker-yellow);
+}
+
+.save-active {
   background-color: var(--another-color);
 }
 
